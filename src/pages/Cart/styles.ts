@@ -27,6 +27,12 @@ export const Product = styled.View`
   flex-direction: row;
 `;
 
+export const ListSeparator = styled.View`
+  background: #fff;
+  flex: 1;
+  flex-direction: row;
+`;
+
 export const ProductImage = styled.Image`
   height: 92px;
   width: 92px;

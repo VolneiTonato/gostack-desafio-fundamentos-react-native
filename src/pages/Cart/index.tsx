@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { View } from 'react-native';
+
+import CartTotals from '../../components/CartTotals';
 
 import {
   Container,
@@ -21,6 +23,7 @@ import {
   TotalProductsContainer,
   TotalProductsText,
   SubtotalValue,
+  ListSeparator,
 } from './styles';
 
 import { useCart } from '../../hooks/cart';
@@ -37,37 +40,32 @@ interface Product {
 
 const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
+  const { cartTotal, totalItensInCart } = CartTotals();
 
-  function handleIncrement(id: string): void {
-    // TODO
-  }
+  const handleIncrement = useCallback(
+    (id: string) => {
+      increment(id);
+    },
+    [increment],
+  );
 
-  function handleDecrement(id: string): void {
-    // TODO
-  }
-
-  const cartTotal = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
-
-    return formatValue(0);
-  }, [products]);
-
-  const totalItensInCart = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
-
-    return 0;
-  }, [products]);
+  const handleDecrement = useCallback(
+    (id: string) => {
+      decrement(id);
+    },
+    [decrement],
+  );
 
   return (
     <Container>
       <ProductContainer>
         <ProductList
           data={products}
-          keyExtractor={item => item.id}
           ListFooterComponent={<View />}
           ListFooterComponentStyle={{
             height: 80,
           }}
+          ItemSeparatorComponent={() => <ListSeparator />}
           renderItem={({ item }: { item: Product }) => (
             <Product>
               <ProductImage source={{ uri: item.image_url }} />
@@ -103,6 +101,7 @@ const Cart: React.FC = () => {
               </ActionContainer>
             </Product>
           )}
+          keyExtractor={item => item.id}
         />
       </ProductContainer>
       <TotalProductsContainer>
